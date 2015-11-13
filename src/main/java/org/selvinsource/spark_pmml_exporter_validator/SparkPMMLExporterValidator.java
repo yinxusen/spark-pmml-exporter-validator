@@ -41,7 +41,8 @@ public class SparkPMMLExporterValidator {
 		LinearRegressionModel,
 		RidgeRegressionModel,
 		LassoModel,
-		NaiveBayesClassificationModel;
+		NaiveBayesClassificationModel,
+		NaiveBayesHouseVote84
     }
 	
 	public static void main( String[] args ) throws JAXBException, DatatypeConfigurationException, SAXException, IOException
@@ -89,10 +90,14 @@ public class SparkPMMLExporterValidator {
 	    	 System.out.println(ModelType.DecisionTreeClassificationModel + " selected");
 	    	 evaluateClassificationTreeModelBreastCancer(createEvaluator(exportedModelsPath + "decisiontree_classification.xml"));
 	         break;
-	     case  NaiveBayesClassificationModel:
+	     case NaiveBayesClassificationModel:
 	    	 System.out.println(ModelType.NaiveBayesClassificationModel + " selected");
 	    	 evaluateMulticlassClassificationModelIris(createEvaluator(exportedModelsPath + "naivebayes_classification.xml"));
-	         break;	    	 
+	         break;
+		 case NaiveBayesHouseVote84:
+	    	 System.out.println(ModelType.NaiveBayesHouseVote84 + " selected");
+	    	 evaluateBinaryclassClassificationModelHouseVote84(createEvaluator(exportedModelsPath + "naivebayes_housevote84.xml"));
+	         break;
 	     default:
 	    	 System.out.println("Model selected not implemented");
 	    	 return;
@@ -134,6 +139,16 @@ public class SparkPMMLExporterValidator {
 		map = SparkPMMLExporterValidator.<ClassificationMap>evaluate(new Double[]{5.9,3.0,5.1,1.8}, evaluator);
 		System.out.println("Class value for new Double[]{5.9,3.0,5.1,1.8}: " + map.getResult());
 		
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static void evaluateBinaryclassClassificationModelHouseVote84(Evaluator evaluator){
+
+	    ClassificationMap map;
+
+		map = SparkPMMLExporterValidator.<ClassificationMap>evaluate(
+			new Double[]{1.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0}, evaluator);
+		System.out.println("Class value for 1: " + map.getResult());
 	}
 	
 	private static void evaluateLinearRegressionModelWineQuality(Evaluator evaluator){
